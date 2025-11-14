@@ -31,7 +31,7 @@ import AdvancedAnalytics from "./components/AdvancedAnalytics";
 import IntelliconLogo from "./components/IntelliconLogo";
 
 // API Configuration
-const API_BASE_URL = "http://127.0.0.1:4000";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:4000";
 
 // Application States
 const APP_STATES = {
