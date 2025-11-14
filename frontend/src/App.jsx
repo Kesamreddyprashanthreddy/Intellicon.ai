@@ -31,9 +31,8 @@ import AdvancedAnalytics from "./components/AdvancedAnalytics";
 import IntelliconLogo from "./components/IntelliconLogo";
 
 // API Configuration
-// In production (Vercel), use relative path. In development, use localhost
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 
-  (import.meta.env.PROD ? "/api" : "http://127.0.0.1:4000");
+// Backend URL - Using deployed Render backend
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://intellicon-ai-2.onrender.com";
 
 // Application States
 const APP_STATES = {
