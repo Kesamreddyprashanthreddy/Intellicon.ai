@@ -6,35 +6,17 @@ from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from pydantic import BaseModel
+from dotenv import load_dotenv
 
-# Load environment variables
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-except:
-    pass
+import utils
+import database
 
-# Import modules with error handling
-try:
-    import utils
-except Exception as e:
-    print(f"Utils import warning: {e}")
-    utils = None
+load_dotenv()
 
-try:
-    import database
-except Exception as e:
-    print(f"Database import warning: {e}")
-    database = None
+app = FastAPI(title="Document Summary Assistant")
 
-app = FastAPI(title="Document Summary Assistant", docs_url="/api/docs", redoc_url="/api/redoc")
-
-# Initialize database (with error handling for serverless)
-if database:
-    try:
-        database.init_database()
-    except Exception as e:
-        print(f"Database initialization warning: {e}")
+# Initialize database
+database.init_database()
 
 app.add_middleware(
     CORSMiddleware,
@@ -43,21 +25,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/")
-async def root():
-    return {
-        "message": "Intellicon.ai Backend API",
-        "status": "running",
-        "docs": "/api/docs"
-    }
-
 @app.get("/health")
 async def health():
-    return {
-        "status": "ok",
-        "utils_loaded": utils is not None,
-        "database_loaded": database is not None
-    }
+    return {"status": "ok"}
 
 @app.post("/database/reset")
 async def reset_database():
@@ -69,9 +39,6 @@ async def reset_database():
 
 @app.post("/upload")
 async def upload(file: UploadFile = File(...)):
-    if not utils:
-        raise HTTPException(status_code=503, detail="Utils module not available in serverless environment")
-    
     if not file:
         raise HTTPException(status_code=400, detail="No file uploaded")
 
