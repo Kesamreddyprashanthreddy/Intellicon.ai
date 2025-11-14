@@ -15,8 +15,11 @@ load_dotenv()
 
 app = FastAPI(title="Document Summary Assistant")
 
-# Initialize database
-database.init_database()
+# Initialize database (with error handling for serverless)
+try:
+    database.init_database()
+except Exception as e:
+    print(f"Database initialization warning: {e}")
 
 app.add_middleware(
     CORSMiddleware,

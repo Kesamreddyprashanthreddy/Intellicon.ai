@@ -7,8 +7,12 @@ from pathlib import Path
 DATABASE_PATH = Path(__file__).parent / "documents.db"
 
 def init_database():
-    conn = sqlite3.connect(DATABASE_PATH)
-    cursor = conn.cursor()
+    try:
+        conn = sqlite3.connect(DATABASE_PATH)
+        cursor = conn.cursor()
+    except Exception as e:
+        print(f"Database connection error: {e}")
+        return
     
     # First, check if the table exists and get its schema
     cursor.execute("PRAGMA table_info(documents)")
@@ -234,5 +238,9 @@ def reset_database():
     init_database()
     print("Database reset complete")
 
-# Initialize database on import
-init_database()
+# Initialize database on import (with error handling for serverless)
+try:
+    init_database()
+except Exception as e:
+    print(f"Warning: Could not initialize database: {e}")
+    print("Database features will be limited in serverless environment")
