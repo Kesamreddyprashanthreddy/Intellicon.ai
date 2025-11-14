@@ -14,8 +14,20 @@
       "dest": "api/index.py"
     },
     {
+      "src": "/favicon.ico",
+      "dest": "/intellicon-favicon.svg"
+    },
+    {
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1"
+    },
+    {
+      "src": "/(.*\\.(svg|png|jpg|jpeg|css|js|json))",
+      "dest": "/$1"
+    },
+    {
       "src": "/(.*)",
-      "dest": "frontend/dist/$1"
+      "dest": "/index.html"
     }
   ],
   "env": {
